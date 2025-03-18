@@ -1,9 +1,14 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export class GetMergedLambda extends NodejsFunction {
   constructor(scope: Construct) {
+    const movieApiKey = ssm.StringParameter.valueForStringParameter(
+      scope,
+      '/cdk-serverless-app/api-key-movie-db',
+    );
     super(scope, 'GetMergedLambda', {
       runtime: Runtime.NODEJS_20_X,
       memorySize: 256,
@@ -11,9 +16,11 @@ export class GetMergedLambda extends NodejsFunction {
         minify: true,
         sourceMap: true,
       },
-      entry: 'src/lambda/mergedLambda.ts',
+      entry: 'src/lambda/merged-lambda.ts',
       handler: 'handler',
-      environment: {},
+      environment: {
+        MOVIE_API_KEY: movieApiKey,
+      },
     });
   }
 }
