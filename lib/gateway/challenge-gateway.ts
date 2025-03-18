@@ -15,6 +15,9 @@ export class ChallengeGateway extends Construct {
     const api = new apiGateway.RestApi(this, 'TransactionsApi', {
       restApiName: 'Rimac Challenge API',
       description: 'Backend NodeJS/AWS Challenge - API',
+      deployOptions: {
+        tracingEnabled: true,
+      },
     });
 
     const mergedResource = api.root.addResource('fusionados');

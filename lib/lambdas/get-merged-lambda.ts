@@ -1,8 +1,9 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 interface GetMergedLambdaParams {
   historyTable: Table;
@@ -32,6 +33,7 @@ export class GetMergedLambda extends NodejsFunction {
       },
       entry: 'src/lambda/get-merged-lambda.ts',
       handler: 'handler',
+      tracing: Tracing.ACTIVE,
       environment: {
         MOVIE_API_KEY: movieApiKey,
         MOVIE_API_BASE_URL: baseUrlMovieApi,
@@ -43,5 +45,9 @@ export class GetMergedLambda extends NodejsFunction {
 
     params.charactersTable.grantReadData(this);
     params.historyTable.grantWriteData(this);
+
+    this.role?.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName('AWSXRayDaemonWriteAccess'),
+    );
   }
 }

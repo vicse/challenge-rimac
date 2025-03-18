@@ -1,7 +1,8 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 interface CreateCharacterLambdaParams {
   charactersTable: Table;
@@ -18,11 +19,16 @@ export class CreateCharacterLambda extends NodejsFunction {
       },
       entry: 'src/lambda/create-character-lambda.ts',
       handler: 'handler',
+      tracing: Tracing.ACTIVE,
       environment: {
         CHARACTERS_TABLE: params.charactersTable.tableName,
       },
     });
 
     params.charactersTable.grantWriteData(this);
+
+    this.role?.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName('AWSXRayDaemonWriteAccess'),
+    );
   }
 }

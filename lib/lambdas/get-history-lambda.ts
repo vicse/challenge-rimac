@@ -1,7 +1,8 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 interface GetMergedLambdaParams {
   historyTable: Table;
@@ -18,11 +19,16 @@ export class GetHistoryLambda extends NodejsFunction {
       },
       entry: 'src/lambda/get-history-lambda.ts',
       handler: 'handler',
+      tracing: Tracing.ACTIVE,
       environment: {
         HISTORY_TABLE: params.historyTable.tableName,
       },
     });
 
     params.historyTable.grantReadData(this);
+
+    this.role?.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName('AWSXRayDaemonWriteAccess'),
+    );
   }
 }
