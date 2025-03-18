@@ -6,6 +6,7 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 
 interface GetMergedLambdaParams {
   historyTable: Table;
+  charactersTable: Table;
 }
 
 export class GetMergedLambda extends NodejsFunction {
@@ -36,9 +37,11 @@ export class GetMergedLambda extends NodejsFunction {
         MOVIE_API_BASE_URL: baseUrlMovieApi,
         SWAPI_BASE_URL: baseUrlSwapiApi,
         HISTORY_TABLE: params.historyTable.tableName,
+        CHARACTERS_TABLE: params.charactersTable.tableName,
       },
     });
 
+    params.charactersTable.grantReadData(this);
     params.historyTable.grantWriteData(this);
   }
 }

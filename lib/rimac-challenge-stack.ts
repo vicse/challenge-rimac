@@ -15,7 +15,10 @@ export class RimacChallengeStack extends cdk.Stack {
     const charactersTable = new CharactersTable(this);
     const historyTable = new HistoryTable(this);
 
-    const getMergedLambda = new GetMergedLambda(this, { historyTable });
+    const getMergedLambda = new GetMergedLambda(this, {
+      historyTable,
+      charactersTable,
+    });
     const getHistoryLambda = new GetHistoryLambda(this, { historyTable });
     const createCharacterLambda = new CreateCharacterLambda(this, {
       charactersTable,
