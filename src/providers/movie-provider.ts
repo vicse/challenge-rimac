@@ -8,7 +8,7 @@ import { getEnv } from '../utils/envs';
 export const getDirector = async (
   name: string,
 ): Promise<ITheMovieApiDirectorResponse> => {
-  const url = 'https://api.themoviedb.org/3';
+  const url = getEnv('MOVIE_API_BASE_URL');
   const resp = await axios.get<ITheMovieApiResponse>(`${url}/search/person`, {
     params: { api_key: getEnv('MOVIE_API_KEY'), query: name },
   });
