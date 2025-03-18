@@ -6,7 +6,7 @@ import {
   GetHistoryLambda,
 } from './lambdas';
 import { ChallengeGateway } from './gateway/challenge-gateway';
-import { CharactersTable, HistoryTable } from './dynamodb';
+import { CacheTable, CharactersTable, HistoryTable } from './dynamodb';
 
 export class RimacChallengeStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -14,10 +14,12 @@ export class RimacChallengeStack extends cdk.Stack {
 
     const charactersTable = new CharactersTable(this);
     const historyTable = new HistoryTable(this);
+    const cacheTable = new CacheTable(this);
 
     const getMergedLambda = new GetMergedLambda(this, {
       historyTable,
       charactersTable,
+      cacheTable,
     });
     const getHistoryLambda = new GetHistoryLambda(this, { historyTable });
     const createCharacterLambda = new CreateCharacterLambda(this, {

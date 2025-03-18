@@ -8,6 +8,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 interface GetMergedLambdaParams {
   historyTable: Table;
   charactersTable: Table;
+  cacheTable: Table;
 }
 
 export class GetMergedLambda extends NodejsFunction {
@@ -40,11 +41,13 @@ export class GetMergedLambda extends NodejsFunction {
         SWAPI_BASE_URL: baseUrlSwapiApi,
         HISTORY_TABLE: params.historyTable.tableName,
         CHARACTERS_TABLE: params.charactersTable.tableName,
+        CACHE_TABLE: params.cacheTable.tableName,
       },
     });
 
     params.charactersTable.grantReadData(this);
     params.historyTable.grantWriteData(this);
+    params.cacheTable.grantReadWriteData(this);
 
     this.role?.addManagedPolicy(
       iam.ManagedPolicy.fromAwsManagedPolicyName('AWSXRayDaemonWriteAccess'),
