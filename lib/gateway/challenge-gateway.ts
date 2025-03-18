@@ -5,6 +5,7 @@ import * as apiGateway from 'aws-cdk-lib/aws-apigateway';
 interface ChallengeGatewayParams {
   getMergedLambda: NodejsFunction;
   getHistoryLambda: NodejsFunction;
+  createCharacterLambda: NodejsFunction;
 }
 
 export class ChallengeGateway extends Construct {
@@ -28,6 +29,14 @@ export class ChallengeGateway extends Construct {
     historyResource.addMethod(
       'GET',
       new apiGateway.LambdaIntegration(params.getHistoryLambda, {
+        requestTemplates: { 'application/json': '{ "statusCode": "200" }' },
+      }),
+    );
+
+    const storeResource = api.root.addResource('almacenar');
+    storeResource.addMethod(
+      'POST',
+      new apiGateway.LambdaIntegration(params.createCharacterLambda, {
         requestTemplates: { 'application/json': '{ "statusCode": "200" }' },
       }),
     );

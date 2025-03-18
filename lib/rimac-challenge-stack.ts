@@ -1,10 +1,12 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { GetMergedLambda } from './lambdas/get-merged-lambda';
+import {
+  GetMergedLambda,
+  CreateCharacterLambda,
+  GetHistoryLambda,
+} from './lambdas';
 import { ChallengeGateway } from './gateway/challenge-gateway';
-import { CharactersTable } from './dynamodb/characters-table';
-import { HistoryTable } from './dynamodb/history-table';
-import { GetHistoryLambda } from './lambdas/get-history-lambda';
+import { CharactersTable, HistoryTable } from './dynamodb';
 
 export class RimacChallengeStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -15,7 +17,14 @@ export class RimacChallengeStack extends cdk.Stack {
 
     const getMergedLambda = new GetMergedLambda(this, { historyTable });
     const getHistoryLambda = new GetHistoryLambda(this, { historyTable });
+    const createCharacterLambda = new CreateCharacterLambda(this, {
+      charactersTable,
+    });
 
-    new ChallengeGateway(this, { getMergedLambda, getHistoryLambda });
+    new ChallengeGateway(this, {
+      getMergedLambda,
+      getHistoryLambda,
+      createCharacterLambda,
+    });
   }
 }
