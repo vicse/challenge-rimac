@@ -2,9 +2,14 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
+
+interface GetMergedLambdaParams {
+  historyTable: Table;
+}
 
 export class GetMergedLambda extends NodejsFunction {
-  constructor(scope: Construct) {
+  constructor(scope: Construct, params: GetMergedLambdaParams) {
     const movieApiKey = ssm.StringParameter.valueForStringParameter(
       scope,
       '/cdk-serverless-app/api-key-movie-db',
@@ -30,7 +35,10 @@ export class GetMergedLambda extends NodejsFunction {
         MOVIE_API_KEY: movieApiKey,
         MOVIE_API_BASE_URL: baseUrlMovieApi,
         SWAPI_BASE_URL: baseUrlSwapiApi,
+        HISTORY_TABLE: params.historyTable.tableName,
       },
     });
+
+    params.historyTable.grantWriteData(this);
   }
 }

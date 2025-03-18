@@ -5,6 +5,7 @@ import {
 } from '../mappers/film-mapper';
 import { Film } from '../entities/film';
 import { getDirector } from '../providers/movie-provider';
+import { createHistory } from '../repositories/history-repository';
 
 export const getFilmService = async (id: number): Promise<Film> => {
   const filmApi = await getFilm(id);
@@ -12,5 +13,6 @@ export const getFilmService = async (id: number): Promise<Film> => {
   const filmEntity = filmDtoToEntityMapper(filmApi);
   filmEntity.director = directorDtoToEntityMapper(director);
   console.log(filmEntity);
+  await createHistory(filmEntity);
   return filmEntity;
 };
