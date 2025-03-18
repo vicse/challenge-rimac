@@ -7,5 +7,11 @@ export class HistoryTable extends Table {
       partitionKey: { name: 'id', type: AttributeType.STRING },
       sortKey: { name: 'request_date', type: AttributeType.NUMBER },
     });
+
+    this.addGlobalSecondaryIndex({
+      indexName: 'STATUS_INDEX',
+      partitionKey: { name: 'status', type: AttributeType.STRING },
+      sortKey: { name: 'request_date', type: AttributeType.NUMBER },
+    });
   }
 }

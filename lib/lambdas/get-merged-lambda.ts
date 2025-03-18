@@ -29,7 +29,7 @@ export class GetMergedLambda extends NodejsFunction {
         minify: true,
         sourceMap: true,
       },
-      entry: 'src/lambda/merged-lambda.ts',
+      entry: 'src/lambda/get-merged-lambda.ts',
       handler: 'handler',
       environment: {
         MOVIE_API_KEY: movieApiKey,

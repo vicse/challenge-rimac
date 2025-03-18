@@ -4,6 +4,7 @@ import * as apiGateway from 'aws-cdk-lib/aws-apigateway';
 
 interface ChallengeGatewayParams {
   getMergedLambda: NodejsFunction;
+  getHistoryLambda: NodejsFunction;
 }
 
 export class ChallengeGateway extends Construct {
@@ -19,6 +20,14 @@ export class ChallengeGateway extends Construct {
     mergedResource.addMethod(
       'GET',
       new apiGateway.LambdaIntegration(params.getMergedLambda, {
+        requestTemplates: { 'application/json': '{ "statusCode": "200" }' },
+      }),
+    );
+
+    const historyResource = api.root.addResource('historial');
+    historyResource.addMethod(
+      'GET',
+      new apiGateway.LambdaIntegration(params.getHistoryLambda, {
         requestTemplates: { 'application/json': '{ "statusCode": "200" }' },
       }),
     );
