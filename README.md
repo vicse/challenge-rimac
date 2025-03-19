@@ -1,8 +1,13 @@
 # Backend Nodejs/AWS Challenge 
 
-Se desarrolló el proyecto usando serverless CDK como IaC y servicios de AWS.
+Se desarrolló el proyecto usando serverless CDK como IaC y servicios de AWS, con integración de dos APIs una publica y otra privada.
 
-## Endpoints
+## Diagrama de Arquitectura
+
+![img.png](assets/Rimac_Challenge_Diagrama_Arquitectura.drawio.png)
+
+
+## Endpoints API GATEWAY
 
 
 | Operation                                                                               | Type | URI |
@@ -24,24 +29,51 @@ Evidencias de la mejora y los tiempos de respuesta.
 
 1. Primera solicitud tardó unos ***2.22s***
 
-![img.png](img.png)
+![img.png](assets/img.png)
 
 2. Segunda solicitud tardó unos ***181ms***
 
-![img_1.png](img_1.png)
+![img_1.png](assets/img_1.png)
 
 # Optimizacion de lambdas
 
 Se uso esbuild para minificar el código de las lambdas, 
 así como la arquitectura ***ARM_64***, se seteo el mínimo del timeout para la respuesta de los endpoints.
 
+# Uso de AWS X-Ray
+
+Se configuró la trazabilidad de las peticiones y la integración de los lambdas.
+
+![img_2.png](assets/img_2.png)
 
 
-## Useful commands
+## Comandos Útiles
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+* Compila Typescript a Javascript
+  ```
+  npm run build
+  ```
+
+* Dejar en modo watching para compilar los cambios
+  ```
+  npm run watch
+  ```
+* Ejecuta las pruenas unitarias
+  ```
+  npm run test
+  ```
+
+* Desplegar el stack hacia tu cuenta por defecto AWS account/region
+  ```
+  npx cdk deploy
+  ```
+
+* Comparar la pila implementada con la del estado actual de proyecto
+  ```
+  npx cdk diff
+  ```
+
+* Crea una plantilla de CloudFormation
+  ```
+  npx cdk synth
+  ```
