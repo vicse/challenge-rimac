@@ -37,7 +37,7 @@ Evidencias de la mejora y los tiempos de respuesta.
 
 # Optimizacion de lambdas
 
-Se uso esbuild para minificar el código de las lambdas, 
+Se uso esbuild https://esbuild.github.io/ para minificar el código de las lambdas, 
 así como la arquitectura ***ARM_64***, se seteo el mínimo del timeout para la respuesta de los endpoints.
 
 # Uso de AWS X-Ray
