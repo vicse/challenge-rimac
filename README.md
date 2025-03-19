@@ -30,6 +30,11 @@ Evidencias de la mejora y los tiempos de respuesta.
 
 ![img_1.png](img_1.png)
 
+# Optimizacion de lambdas
+
+Se uso esbuild para minificar el código de las lambdas, 
+así como la arquitectura ***ARM_64***, se seteo el mínimo del timeout para la respuesta de los endpoints.
+
 
 
 ## Useful commands
